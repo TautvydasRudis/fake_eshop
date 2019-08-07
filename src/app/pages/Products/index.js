@@ -7,26 +7,15 @@ function Products({
   isLoading,
   error,
   products = [],
-  favorites,
-  cart,
-  ...restProps
+
+  cart
 }) {
   return (
     <div className="Products">
       {isLoading && <Loader />}
       {error && <p>{error}</p>}
       {products.map(data => {
-        const { count = 0 } = cart.find(({ id }) => id === data.id) || {};
-
-        return (
-          <ProductCard
-            {...restProps}
-            {...data}
-            key={data.id}
-            isFavorite={favorites.includes(data.id)}
-            cartCount={count}
-          />
-        );
+        return <ProductCard {...data} key={data.id} />;
       })}
     </div>
   );
