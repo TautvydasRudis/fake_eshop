@@ -12,7 +12,7 @@ import {
   PageNotFound,
   SingleProduct
 } from "./pages";
-import { Layout } from "./components";
+import { Layout, BackgroundContext } from "./components";
 import { useFetch } from "./hooks";
 import { toggleArrayItem } from "./util";
 import { ROUTES } from "../constants";
@@ -54,65 +54,67 @@ function App() {
   };
 
   return (
-    <Router>
-      <Layout>
-        <Switch>
-          <Route
-            path={ROUTES.defaultPage}
-            exact
-            render={() => (
-              <Products
-                toggleFavorite={toggleFavorite}
-                addToCart={addToCart}
-                removeFromCart={removeFromCart}
-                products={products}
-                cart={cart}
-                favorites={favorites}
-                isLoading={isLoading}
-                error={error}
-              />
-            )}
-          />
-          <Route
-            path={ROUTES.cart}
-            exact
-            render={() => <Cart cart={cart} products={products} />}
-          />
-          <Route
-            path={ROUTES.favorites}
-            exact
-            render={() => (
-              <Favorites
-                toggleFavorite={toggleFavorite}
-                addToCart={addToCart}
-                removeFromCart={removeFromCart}
-                favorites={favorites}
-                products={products}
-                cart={cart}
-              />
-            )}
-          />
-          <Route
-            path={ROUTES.product}
-            exact
-            render={props => {
-              const { id } = props.match.params;
-              const product = products.find(product => product.id === id);
-
-              return (
-                <SingleProduct
-                  {...props}
-                  product={product}
+    <BackgroundContext.Provider value="green">
+      <Router>
+        <Layout>
+          <Switch>
+            <Route
+              path={ROUTES.defaultPage}
+              exact
+              render={() => (
+                <Products
+                  toggleFavorite={toggleFavorite}
+                  addToCart={addToCart}
+                  removeFromCart={removeFromCart}
+                  products={products}
+                  cart={cart}
+                  favorites={favorites}
                   isLoading={isLoading}
+                  error={error}
                 />
-              );
-            }}
-          />
-          <Redirect exact from={ROUTES.home} to={ROUTES.defaultPage} />
-          <Route component={PageNotFound} />
-        </Switch>
-      </Layout>
-    </Router>
+              )}
+            />
+            <Route
+              path={ROUTES.cart}
+              exact
+              render={() => <Cart cart={cart} products={products} />}
+            />
+            <Route
+              path={ROUTES.favorites}
+              exact
+              render={() => (
+                <Favorites
+                  toggleFavorite={toggleFavorite}
+                  addToCart={addToCart}
+                  removeFromCart={removeFromCart}
+                  favorites={favorites}
+                  products={products}
+                  cart={cart}
+                />
+              )}
+            />
+            <Route
+              path={ROUTES.product}
+              exact
+              render={props => {
+                const { id } = props.match.params;
+                const product = products.find(product => product.id === id);
+
+                return (
+                  <SingleProduct
+                    {...props}
+                    product={product}
+                    isLoading={isLoading}
+                  />
+                );
+              }}
+            />
+            <Redirect exact from={ROUTES.home} to={ROUTES.defaultPage} />
+            <Route component={PageNotFound} />
+          </Switch>
+        </Layout>
+      </Router>
+    </BackgroundContext.Provider>
   );
 }
 
